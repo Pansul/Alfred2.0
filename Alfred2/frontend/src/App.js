@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
-import {a,b,c,d,e,f,g} from './index';
+import {a,b,c,d,e,f,g,sorry,n} from './index';
 import styled from 'styled-components';
 import './App.css';
 
@@ -13,11 +13,11 @@ const StyledComponent = styled.img`
   z-index: 0;
   
   -webkit-backface-visibility: hidden;
-  -webkit-animation: imageAnimation ${props => props.number}s linear infinite 0s;
+  -webkit-animation: ${props => props.number > 6 ? 'imageAnimationGtSix' : 'imageAnimation'} ${props => props.number}s linear infinite 0s;
   -moz-animation: imageAnimation ${props => props.number}s linear infinite 0s;
   -o-animation: imageAnimation ${props => props.number}s linear infinite 0s;
   -ms-animation: imageAnimation ${props => props.number}s linear infinite 0s;
-  animation: imageAnimation ${props => props.number}s linear infinite 0s;
+  animation: ${props => props.number > 6 ? 'imageAnimationGtSix' : 'imageAnimation'} ${props => props.number}s linear infinite 0s;
   
   -webkit-animation-delay: ${props => props.index}s;
   -moz-animation-delay: ${props => props.index}s;
@@ -40,13 +40,24 @@ class App extends Component {
   submitResp = (text) => {
     this.images = [];
     let length = text.length;
-    for(let i =0 ; i<length ; i++){
-      if(text[i] !== ' ')
-        this.images.push(<StyledComponent key={i} src={require(`./${text[i]}.png`)} number={length} index={i+1} />);
-      else{
-        this.images.push(<StyledComponent key={i} src={require(`./space.png`)} number={length} index={i+1} />)
+    if(this.state.text !== "hello" || this.state.text !== "wher is the restroom"|| this.state.text !== "where is my phone" ) {
+      for (let i = 0; i < length; i++) {
+        if (text[i] !== ' ') {
+          this.images.push(<StyledComponent key={i} src={require(`./${text[i].toLowerCase()}.png`)} number={length}
+                                            index={i + 1}/>);
+        }
+        else {
+          this.images.push(<StyledComponent key={i} src={require(`./space.png`)} number={length} index={i + 1}/>)
+        }
       }
     }
+    else{
+      switch(this.state.text){
+        case "hello":
+          
+      }
+    }
+
     this.setState({images : this.images})
   };
 
@@ -68,6 +79,7 @@ class App extends Component {
         <header className="App-header">
           <h1 className="App-title">Text to Sign Language</h1>
         </header>
+        <img src={n} className="restroom"/>
         <textarea onChange={this.handleChange} onKeyPress={this.handleKey} className="text-area" value={this.state.text} /><br/>
         <img className="img-size" src={require("./mac.png")}/>
         <div id="crossfade">
